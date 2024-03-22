@@ -12,8 +12,9 @@ Este es un juego de memoria simple implementado en Python utilizando la bibliote
 
 Para ejecutar el código, asegúrate de tener Python instalado en tu sistema y las bibliotecas necesarias (turtle y freegames). Luego, simplemente ejecuta el script en tu entorno Python preferido.
 
-
+```
 python nombre_del_archivo.py
+```
 
 ## Acerca del Código
 
