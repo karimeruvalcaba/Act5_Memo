@@ -6,6 +6,7 @@ car = path('car.gif')
 tiles = list(range(32)) * 2
 state = {'mark': None}
 hide = [True] * 64
+taps = 0  # Contador de taps
 
 def square(x, y):
     "Draw white square with black outline at (x, y)."
@@ -29,6 +30,7 @@ def xy(count):
 
 def tap(x, y):
     "Update mark and hidden tiles based on tap."
+    global taps  # Accedemos a la variable global taps
     spot = index(x, y)
     mark = state['mark']
 
@@ -38,9 +40,11 @@ def tap(x, y):
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
+        taps += 1  # Incrementamos el contador de taps
 
 def draw():
     "Draw image and tiles."
+    global taps  # Accedemos a la variable global taps
     clear()
     goto(0, 0)
     shape(car)
@@ -61,6 +65,12 @@ def draw():
         write(tiles[mark], font=('Arial', 30, 'normal'))
 
     update()
+
+    # Verificar si todos los cuadros están destapados
+    if all(not tile_hidden for tile_hidden in hide):
+        print("¡Felicidades! Has destapado todos los cuadros en", taps, "taps.")
+        return
+
     ontimer(draw, 100)
 
 shuffle(tiles)
