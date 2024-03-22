@@ -6,16 +6,17 @@ car = path('car.gif')
 tiles = list(range(32)) * 2
 state = {'mark': None}
 hide = [True] * 64
-taps = 0  # Contador de taps
+taps = 0  
+tile_colors = ['#' + ''.join(choice('0123456789ABCDEF') for _ in range(6)) for _ in range(32)] * 2  # Generate a list of random colors for tiles
 
-def square(x, y):
-    "Draw white square with black outline at (x, y)."
+def square(x, y, fill_color):
+    "Draw colored square with black outline at (x, y)."
     up()
     goto(x, y)
     down()
-    color('black', 'white')
     begin_fill()
-    for count in range(4):
+    color('black', fill_color)
+    for _ in range(4):
         forward(50)
         left(90)
     end_fill()
@@ -30,7 +31,7 @@ def xy(count):
 
 def tap(x, y):
     "Update mark and hidden tiles based on tap."
-    global taps  # Accedemos a la variable global taps
+    global taps  
     spot = index(x, y)
     mark = state['mark']
 
@@ -40,11 +41,11 @@ def tap(x, y):
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
-        taps += 1  # Incrementamos el contador de taps
+        taps += 1  
 
 def draw():
     "Draw image and tiles."
-    global taps  # Accedemos a la variable global taps
+    global taps  
     clear()
     goto(0, 0)
     shape(car)
@@ -53,7 +54,8 @@ def draw():
     for count in range(64):
         if hide[count]:
             x, y = xy(count)
-            square(x, y)
+            fill_color = tile_colors[tiles[count]]  # Assigning color based on tile index
+            square(x, y, fill_color)
 
     mark = state['mark']
 
@@ -66,9 +68,8 @@ def draw():
 
     update()
 
-    # Verificar si todos los cuadros están destapados
     if all(not tile_hidden for tile_hidden in hide):
-        print("¡Felicidades! Has destapado todos los cuadros en", taps, "taps.")
+        print("Congratulations! You've uncovered all the tiles in", taps, "taps.")
         return
 
     ontimer(draw, 100)
